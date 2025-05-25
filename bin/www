@@ -6,33 +6,15 @@
  *
  * @module server
  */
+
 const app = require('../app');
 const debug = require('debug')('expensetracker-nodejsproject:server');
 const http = require('http');
-
-/**
- * Get port from environment and store in Express.
- */
-const port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
-
-/**
- * Create HTTP server.
- */
-const server = http.createServer(app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+const mongoose = require('mongoose');
 
 /**
  * Normalize a port into a number, string, or false.
  */
-
 function normalizePort(val) {
   const port = parseInt(val, 10);
 
@@ -52,7 +34,6 @@ function normalizePort(val) {
 /**
  * Event listener for HTTP server "error" event.
  */
-
 function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
@@ -80,7 +61,6 @@ function onError(error) {
 /**
  * Event listener for HTTP server "listening" event.
  */
-
 function onListening() {
   const addr = server.address();
   const bind = typeof addr === 'string'
@@ -89,3 +69,29 @@ function onListening() {
   debug('Listening on ' + bind);
   console.log(`Server is running on http://localhost:${addr.port}`);
 }
+
+// Get port from environment and store in Express.
+const port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+// MongoDB connection string from env
+const uri = process.env.MONGO_URI;
+
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => {
+  console.log('MongoDB connected');
+
+  // Create HTTP server.
+  const server = http.createServer(app);
+
+  // Listen on provided port, on all network interfaces.
+  server.listen(port);
+  server.on('error', onError);
+  server.on('listening', onListening);
+
+}).catch(err => {
+  console.error('MongoDB connection error:', err);
+  process.exit(1);
+});
