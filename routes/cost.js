@@ -42,7 +42,7 @@ router.post('/add', async (req, res) => {
         res.status(201).json(cost);
 
     } catch (error) {
-        console.error('Server error while adding cost:', error); // optional logging
+        console.error('Server error while adding cost:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
@@ -61,7 +61,6 @@ router.post('/add', async (req, res) => {
  * @returns {number} 200.year - The requested year.
  * @returns {number} 200.month - The requested month.
  * @returns {Array} 200.costs - An array of category objects with expense details.
- *
  * @returns {Object} 400 - If required parameters are missing or invalid.
  * @returns {Object} 500 - If an internal server error occurs.
  */
