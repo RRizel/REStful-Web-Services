@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Cost = require('../models/costs');
+const cost = require('../models/costs');
 
 //Add cost
 /**
@@ -31,7 +31,7 @@ router.post('/add', async (req, res) => {
             return res.status(400).json({ error: `Invalid category. Allowed categories are: ${allowedCategories.join(', ')}` });
         }
 
-        const cost = await Cost.create({
+        const cost = await cost.create({
             description,
             category,
             userid,
@@ -79,7 +79,7 @@ router.get('/report', async (req, res) => {
         const startDate = new Date(yearNum, monthNum - 1, 1);
         const endDate = new Date(yearNum, monthNum, 1);
 
-        const costs = await Cost.find({
+        const costs = await cost.find({
             userid: id,
             Date: { $gte: startDate, $lt: endDate }
         });

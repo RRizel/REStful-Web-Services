@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const user = require('../models/users');
-const Cost = require('../models/costs');
+const cost = require('../models/costs');
 
 //Get user details by id
 /**
@@ -24,7 +24,7 @@ router.get('/users/:id', async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        const costs = await Cost.find({ userid: id });
+        const costs = await cost.find({ userid: id });
 
         const total = costs.reduce((sum, item) => sum + item.sum, 0);
 
