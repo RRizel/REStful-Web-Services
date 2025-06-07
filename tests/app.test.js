@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 
 const app = require('../app');
-const User = require('../models/users');
-const Cost = require('../models/costs');
+const user = require('../models/users');
+const cost = require('../models/costs');
 
 let mongoServer;
 
@@ -18,8 +18,8 @@ beforeAll(async () => {
     });
 
     // Clean DB before tests
-    await User.deleteMany({});
-    await Cost.deleteMany({});
+    await user.deleteMany({});
+    await cost.deleteMany({});
 });
 
 afterAll(async () => {
@@ -37,15 +37,15 @@ describe('User API', () => {
     };
 
     beforeAll(async () => {
-        await User.create(testUser);
+        await user.create(testUser);
     });
 
     afterAll(async () => {
-        await User.deleteMany({});
+        await user.deleteMany({});
     });
 
     test('GET /api/users/:id returns user details with total costs', async () => {
-        await Cost.create([
+        await cost.create([
             { description: 'Food expense', category: 'food', userid: testUser.id, sum: 50 },
             { description: 'Health expense', category: 'health', userid: testUser.id, sum: 30 }
         ]);
@@ -70,7 +70,7 @@ describe('Costs API', () => {
     const testUserId = 'costUser123';
 
     beforeAll(async () => {
-        await User.create({
+        await user.create({
             id: testUserId,
             first_name: 'Cost',
             last_name: 'User',
@@ -80,8 +80,8 @@ describe('Costs API', () => {
     });
 
     afterAll(async () => {
-        await Cost.deleteMany({ userid: testUserId });
-        await User.deleteMany({ id: testUserId });
+        await cost.deleteMany({ userid: testUserId });
+        await user.deleteMany({ id: testUserId });
     });
 
     test('POST /api/add adds a new cost item', async () => {
@@ -128,7 +128,7 @@ describe('Costs API', () => {
             { description: 'Gym', category: 'sport', userid: testUserId, sum: 40, Date: new Date('2025-05-15') },
             { description: 'Books', category: 'education', userid: testUserId, sum: 30, Date: new Date('2025-05-20') }
         ];
-        await Cost.insertMany(costs);
+        await cost.insertMany(costs);
 
         const res = await request(app)
             .get('/api/report')
