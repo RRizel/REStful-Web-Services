@@ -78,7 +78,7 @@ router.get('/report', async (req, res) => {
         const startDate = new Date(yearNum, monthNum - 1, 1);
         const endDate = new Date(yearNum, monthNum, 1);
 
-        const costs = await Cost.find({
+        const costs = await cost.find({
             userid: id,
             Date: { $gte: startDate, $lt: endDate }
         });
