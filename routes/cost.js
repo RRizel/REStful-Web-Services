@@ -31,7 +31,7 @@ router.post('/add', async (req, res) => {
             return res.status(400).json({ error: `Invalid category. Allowed categories are: ${allowedCategories.join(', ')}` });
         }
 
-        const cost = await cost.create({
+        const costDoc = await cost.create({
             description,
             category,
             userid,
@@ -39,7 +39,7 @@ router.post('/add', async (req, res) => {
             date: date || new Date()
         });
 
-        res.status(201).json(cost);
+        res.status(201).json(costDoc);
 
     } catch (error) {
         console.error('Server error while adding cost:', error);
@@ -78,7 +78,7 @@ router.get('/report', async (req, res) => {
         const startDate = new Date(yearNum, monthNum - 1, 1);
         const endDate = new Date(yearNum, monthNum, 1);
 
-        const costs = await cost.find({
+        const costs = await Cost.find({
             userid: id,
             Date: { $gte: startDate, $lt: endDate }
         });
