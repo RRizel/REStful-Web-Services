@@ -36,7 +36,7 @@ router.post('/add', async (req, res) => {
             category,
             userid,
             sum,
-            date: date || new Date()
+            Date: date || new Date()
         });
 
         res.status(201).json(costDoc);
